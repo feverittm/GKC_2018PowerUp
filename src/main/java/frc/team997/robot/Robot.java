@@ -7,39 +7,15 @@
 
 package frc.team997.robot;
 
-import frc.team997.robot.commands.Auto2CubeLeftLeft;
-import frc.team997.robot.commands.Auto2CubeLeftStart;
-import frc.team997.robot.commands.Auto2CubeRightRight;
-import frc.team997.robot.commands.Auto2CubeRightStart;
-import frc.team997.robot.commands.AutoCenterLeftSwitch;
-import frc.team997.robot.commands.AutoCenterRightSwitch;
-import frc.team997.robot.commands.AutoCenterSwitchDelivery;
-import frc.team997.robot.commands.AutoDoNothing;
-import frc.team997.robot.commands.AutoLeftLeftScale;
-import frc.team997.robot.commands.AutoLeftLeftSwitch;
-import frc.team997.robot.commands.AutoLeftRightScale;
-import frc.team997.robot.commands.AutoLeftScale;
-import frc.team997.robot.commands.AutoRightLeftScale;
-import frc.team997.robot.commands.AutoRightRightScale;
-import frc.team997.robot.commands.AutoRightRightSwitch;
-import frc.team997.robot.commands.AutoRightScale;
-import frc.team997.robot.commands.AutoTest;
-import frc.team997.robot.commands.CrossLine;
-import frc.team997.robot.commands.LeftScaleOrSwitch;
-import frc.team997.robot.commands.PDriveToAngle;
-import frc.team997.robot.commands.PDriveToDistance;
-import frc.team997.robot.commands.RightScaleOrSwitch;
-import frc.team997.robot.commands.SwitchSameSideDelivery;
 import frc.team997.robot.subsystems.Collector;
 import frc.team997.robot.subsystems.DriveTrain;
 import frc.team997.robot.subsystems.Elevator;
+import frc.team997.robot.AutoSelector;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -58,6 +34,7 @@ public class Robot extends TimedRobot {
 	public static Elevator elevator;
 	public static OI m_oi;
 	public static Logger logger;
+	public static AutoSelector autoselect;
 	public static String gameData;
 	public static PowerDistributionPanel pdp;
 	
@@ -78,35 +55,12 @@ public class Robot extends TimedRobot {
 		gameData = "";
 		
 		logger = Logger.getInstance();
-		
+
+		autoselect = AutoSelector.getInstance();		
 		pdp.clearStickyFaults();
 		LiveWindow.disableTelemetry(pdp); // turn-off the telemetry features in Livewindow to stop the CTRE Timeouts
 		
-		m_chooser.addDefault("Do nothing", new AutoDoNothing());
-		
-		m_chooser.addObject("Cross line", new CrossLine());
-		//m_chooser.addObject("Same side switch", new SwitchSameSideDelivery());
-		//m_chooser.addObject("Turn 90 degrees", new PDriveToAngle(90));
-		//m_chooser.addObject("Drive forward 5 ft", new PDriveToDistance(0.5, RobotMap.Values.ticksPerFoot * ((60 - RobotMap.Values.robotLength) / 12)));
-		//m_chooser.addObject("Conditionals Test 2/24/28", new AutoTest());
-		
-		//1 CUBE DELIVERY
-		m_chooser.addObject("Center Switch", new AutoCenterSwitchDelivery());
-		
-		m_chooser.addObject("Left Scale or cross line", new AutoLeftScale());
-		m_chooser.addObject("Right Scale or cross line", new AutoRightScale());
-		
-		m_chooser.addObject("Left Switch or cross line", new AutoLeftLeftSwitch());
-		m_chooser.addObject("Right Switch or cross line", new AutoRightRightSwitch());
-		
-		m_chooser.addObject("Left Scale or left switch or cross line", new LeftScaleOrSwitch());
-		m_chooser.addObject("Right Scale or right switch or cross line", new RightScaleOrSwitch());
-		
-		//2 CUBE DELIVERY
-		m_chooser.addObject("2 Cube Left Scale/Switch Left Start", new Auto2CubeLeftStart());
-		m_chooser.addObject("2 Cube Right Scale/Switch Right Start", new Auto2CubeRightStart());
-
-		SmartDashboard.putData("Auto mode", m_chooser);
+		autoselect.dbChooser();
 	}
 
 	/**
@@ -157,130 +111,7 @@ public class Robot extends TimedRobot {
 		
 		//AUTONOMOUS CHOSEN BASED ON GAMEDATA
 		//this logic works. has been tested :)
-		
-		//TODO: add near side switch delivery auto!!
-		
-		//1 CUBE AUTO
-		
-		//AUTO CENTER SWITCH DELIVERY
-		if((m_chooser.getSelected()).getName().equals("AutoCenterSwitchDelivery")) {
-			if(gameData.charAt(0) == 'L') {
-				m_autonomousCommand = new AutoCenterLeftSwitch();
-				System.out.println("Autocommand center switch left");
-			} else {
-				m_autonomousCommand = new AutoCenterRightSwitch();
-				System.out.println("Autocommand center switch right");
-			}
-			
-		} else if((m_chooser.getSelected()).getName().equals("LeftScaleOrSwitch")) {
-			if(gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new AutoLeftLeftScale();
-				System.out.println("Autocommand scale left left");
-			} else if(gameData.charAt(0) == 'L') {
-				m_autonomousCommand = new AutoLeftLeftSwitch();
-				System.out.println("Autocommand switch left left");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand cross line");
-			}
-			
-		} else if((m_chooser.getSelected()).getName().equals("RightScaleOrSwitch")) {
-			if(gameData.charAt(1) == 'R') {
-				m_autonomousCommand = new AutoRightRightScale();
-				System.out.println("Autocommand scale right right");
-			} else if(gameData.charAt(0) == 'R') {
-				m_autonomousCommand = new AutoRightRightSwitch();
-				System.out.println("Autocommand switch right right");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand cross line");
-			}
-			
-		} else if((m_chooser.getSelected()).getName().equals("AutoLeftScale")) {
-			if(gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new AutoLeftLeftScale();
-				System.out.println("Autocommand scale left left");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand cross line");
-			}
-			
-		} else if((m_chooser.getSelected()).getName().equals("AutoRightScale")) {
-			if(gameData.charAt(1) == 'R') {
-				m_autonomousCommand = new AutoRightRightScale();
-				System.out.println("Autocommand scale right right");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand cross line");
-			}
-		}
-		
-		//2 CUBE AUTO
-		
-		//AUTO LEFT SCALE/SWITCH DELIVERY
-		else if((m_chooser.getSelected()).getName().equals("Auto2CubeLeftStart")) {
-			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new Auto2CubeLeftLeft();
-				System.out.println("Autocommand 2 cube left left scale and switch");
-			} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-				m_autonomousCommand = new AutoLeftLeftSwitch();
-				System.out.println("Autocommand 1 cube left left switch (2 CUBE NOT SUPPORTED)");
-			} else if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new AutoLeftLeftScale();
-				System.out.println("Autocommand 1 cube left left scale (2 CUBE NOT SUPPORTED)");
-			} else if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R'){
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED");
-			}
-		}
-		//AUTO RIGHT SCALE/SWITCH DELIVERY	
-		else if((m_chooser.getSelected()).getName().equals("Auto2CubeRightStart")){
-			if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
-				m_autonomousCommand = new Auto2CubeRightRight();
-				System.out.println("Autocommand 2 cube right right scale and switch");
-			} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new AutoRightRightSwitch();
-				System.out.println("Autocommand 1 cube right right switch (2 CUBE NOT SUPPORTED)");
-			} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-				m_autonomousCommand = new AutoRightRightScale();
-				System.out.println("2 CUBE NOT SUPPORTED");
-			} else if (gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED)");
-			}
-		} else if ((m_chooser.getSelected()).getName().equals("AutoRightRightSwitch")) {
-			if(gameData.charAt(0) == 'R') {
-				m_autonomousCommand = new AutoRightRightSwitch();
-				System.out.println("Autocommand right switch right");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("");
-			}
-			
-		} else if ((m_chooser.getSelected()).getName().equals("AutoLeftLeftSwitch")) {
-			if(gameData.charAt(0) == 'L') {
-				m_autonomousCommand = new AutoLeftLeftSwitch();
-				System.out.println("Autocommand left switch left");
-			} else {
-				m_autonomousCommand = new CrossLine();
-				System.out.println("");
-			}
-			
-		} 
-			
-		
-		else {
-			m_autonomousCommand = m_chooser.getSelected();
-			System.out.println("Name is: " + (m_chooser.getSelected()).getName());
-			System.out.println("autocommand is " + m_autonomousCommand);
-		}
-		
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
+		m_autonomousCommand = autoselect.AutoSM();
 
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
