@@ -164,7 +164,8 @@ public class AutoSelector {
 				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED");
 			}
 		}
-		// AUTO RIGHT SCALE/SWITCH DELIVERY
+		
+		// AUTO RIGHT SCALE/SWITCH DELIVERY -- just a test
 		else if (m_cName.equals("Auto2CubeRightStart")) {
 			if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new Auto2CubeRightRight();
