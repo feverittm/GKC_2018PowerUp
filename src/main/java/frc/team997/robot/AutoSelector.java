@@ -43,10 +43,6 @@ public class AutoSelector {
         return instance;
     }
 
-    public void AutoSelector() {
-
-    }
-
     public SendableChooser<Command> dbChooser() {
         // get the autonomous selection from the dashboard.
         // this should be called in INIT
@@ -79,22 +75,23 @@ public class AutoSelector {
     }
 
     public Command AutoSM() {
+        Command m_chosenCommand;
+        String m_cName;
+
         // Autonomous selector.  Use information from the field and the choices from the dashboard
         // In order to work with the field information this needs to be called in AutoInit
 
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 		SmartDashboard.putString("gamedata", gameData);
-		System.out.println("auto init game data: " + gameData);
-		
-		//AUTONOMOUS CHOSEN BASED ON GAMEDATA
-		//this logic works. has been tested :)
-		
-		//TODO: add near side switch delivery auto!!
+        System.out.println("auto init game data: " + gameData);
+
+        m_chosenCommand = m_chooser.getSelected();
+        m_cName = m_chosenCommand.getName();
 		
 		//1 CUBE AUTO
 		
 		//AUTO CENTER SWITCH DELIVERY
-		if((m_chooser.getSelected()).getName().equals("AutoCenterSwitchDelivery")) {
+		if(m_cName.equals("AutoCenterSwitchDelivery")) {
 			if(gameData.charAt(0) == 'L') {
 				m_autonomousCommand = new AutoCenterLeftSwitch();
 				System.out.println("Autocommand center switch left");
@@ -103,7 +100,7 @@ public class AutoSelector {
 				System.out.println("Autocommand center switch right");
 			}
 			
-		} else if((m_chooser.getSelected()).getName().equals("LeftScaleOrSwitch")) {
+		} else if(m_cName.equals("LeftScaleOrSwitch")) {
 			if(gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftScale();
 				System.out.println("Autocommand scale left left");
@@ -115,7 +112,7 @@ public class AutoSelector {
 				System.out.println("Autocommand cross line");
 			}
 			
-		} else if((m_chooser.getSelected()).getName().equals("RightScaleOrSwitch")) {
+		} else if(m_cName.equals("RightScaleOrSwitch")) {
 			if(gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoRightRightScale();
 				System.out.println("Autocommand scale right right");
@@ -127,7 +124,7 @@ public class AutoSelector {
 				System.out.println("Autocommand cross line");
 			}
 			
-		} else if((m_chooser.getSelected()).getName().equals("AutoLeftScale")) {
+		} else if(m_cName.equals("AutoLeftScale")) {
 			if(gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftScale();
 				System.out.println("Autocommand scale left left");
@@ -136,7 +133,7 @@ public class AutoSelector {
 				System.out.println("Autocommand cross line");
 			}
 			
-		} else if((m_chooser.getSelected()).getName().equals("AutoRightScale")) {
+		} else if(m_cName.equals("AutoRightScale")) {
 			if(gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoRightRightScale();
 				System.out.println("Autocommand scale right right");
@@ -149,7 +146,7 @@ public class AutoSelector {
 		//2 CUBE AUTO
 		
 		//AUTO LEFT SCALE/SWITCH DELIVERY
-		else if((m_chooser.getSelected()).getName().equals("Auto2CubeLeftStart")) {
+		else if(m_cName.equals("Auto2CubeLeftStart")) {
 			if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new Auto2CubeLeftLeft();
 				System.out.println("Autocommand 2 cube left left scale and switch");
@@ -165,7 +162,7 @@ public class AutoSelector {
 			}
 		}
 		//AUTO RIGHT SCALE/SWITCH DELIVERY	
-		else if((m_chooser.getSelected()).getName().equals("Auto2CubeRightStart")){
+		else if(m_cName.equals("Auto2CubeRightStart")){
 			if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new Auto2CubeRightRight();
 				System.out.println("Autocommand 2 cube right right scale and switch");
@@ -179,7 +176,7 @@ public class AutoSelector {
 				m_autonomousCommand = new CrossLine();
 				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED)");
 			}
-		} else if ((m_chooser.getSelected()).getName().equals("AutoRightRightSwitch")) {
+		} else if (m_cName.equals("AutoRightRightSwitch")) {
 			if(gameData.charAt(0) == 'R') {
 				m_autonomousCommand = new AutoRightRightSwitch();
 				System.out.println("Autocommand right switch right");
@@ -188,7 +185,7 @@ public class AutoSelector {
 				System.out.println("");
 			}
 			
-		} else if ((m_chooser.getSelected()).getName().equals("AutoLeftLeftSwitch")) {
+		} else if (m_cName.equals("AutoLeftLeftSwitch")) {
 			if(gameData.charAt(0) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftSwitch();
 				System.out.println("Autocommand left switch left");
@@ -201,7 +198,7 @@ public class AutoSelector {
 		else {
 			m_autonomousCommand = m_chooser.getSelected();
 			System.out.println("Name is: " + (m_chooser.getSelected()).getName());
-			System.out.println("autocommand is " + m_autonomousCommand);
+			System.out.println("autocommand is " + m_autonomousCommand.getName());
         }
         
         return m_autonomousCommand;
