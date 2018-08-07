@@ -136,8 +136,6 @@ public class Logger {
     	return this.logging;
     }
     
-    
-    
     public void close() {
     	if(this.wantToLog()){
 	    	if(this.writer != null) {

@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		logger.openFile();
+		//logger.openFile();
 		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		SmartDashboard.putString("gamedata", gameData);
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
 		drivetrain.updateDashboard();
 		collector.updateSmartDashboard();
 		elevator.updateSmartDashboard();
-		logger.logAll();
+		//logger.logAll();
 		//controlCurrent();
 	}
 
@@ -149,6 +149,7 @@ public class Robot extends TimedRobot {
 		drivetrain.updateDashboard();
 		collector.updateSmartDashboard();
 		elevator.updateSmartDashboard();
+		logger.openFile();
 		//controlCurrent();
 
 	}
@@ -163,6 +164,7 @@ public class Robot extends TimedRobot {
 		collector.updateSmartDashboard();
 		elevator.updateSmartDashboard();
 		//controlCurrent();
+		logger.logElevator();
 		elevator.autozero();
 	}
 
