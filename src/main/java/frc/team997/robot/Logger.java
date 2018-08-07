@@ -107,7 +107,31 @@ public class Logger {
 	        }
     	}
     }
-    
+		public void logElevator() {
+		if (this.wantToLog()) {
+			try {
+				this.timeSinceStart = (System.currentTimeMillis() - this.startTime) / 1000.0;
+
+				this.writer.write(String.format("%.3f", this.timeSinceStart));
+				this.writer.write(String.format(",%.3f", Robot.pdp.getVoltage()));
+				this.writer.write(String.format(",%.3f", Robot.elevator.flop));
+				this.writer.write(String.format(",%.3f", Robot.elevator.absolutePosition));
+				this.writer.write(String.format(",%b", sensorCollection.isFwdLimitSwitchClosed()));
+				this.writer.write(String.format(",%b", sensorCollection.isRevLimitSwitchClosed()));
+				this.writer.write(String.format(",%b", Robot.elevator.isZeroed));
+				this.writer.write(String.format(",%d", Motor.getClosedLoopError(0)));
+				this.writer.write(String.format(",%d", Motor.getSelectedSensorPosition(0)));
+				this.writer.write(String.format(",%.3f", getCurrent()));
+				this.writer.write(String.format(",%.3f", Motor.getMotorOutputVoltage()));
+
+				this.writer.newLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
     public boolean wantToLog(){
     	this.logging= SmartDashboard.getBoolean(this.loggerBoolean, false);
     	return this.logging;
