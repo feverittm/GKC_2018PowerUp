@@ -114,7 +114,7 @@ public class Elevator extends Subsystem {
     
     public double getPosition() {
     	return Motor.getSelectedSensorPosition(0);
-    }
+	}
     
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -133,6 +133,10 @@ public class Elevator extends Subsystem {
     
     public double getError() {
     	return Motor.getClosedLoopError(0);
+	}
+	
+	public double getMotorOutputVoltage() {
+    	return Motor.getMotorOutputVoltage();
     }
     
     public double getVoltage() {

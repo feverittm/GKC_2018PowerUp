@@ -116,14 +116,13 @@ public class Logger {
 				this.writer.write(String.format(",%.3f", Robot.pdp.getVoltage()));
 				this.writer.write(String.format(",%.3f", Robot.elevator.flop));
 				this.writer.write(String.format(",%.3f", Robot.elevator.absolutePosition));
-				this.writer.write(String.format(",%b", sensorCollection.isFwdLimitSwitchClosed()));
-				this.writer.write(String.format(",%b", sensorCollection.isRevLimitSwitchClosed()));
+				this.writer.write(String.format(",%b", Robot.elevator.sensorCollection.isFwdLimitSwitchClosed()));
+				this.writer.write(String.format(",%b", Robot.elevator.sensorCollection.isRevLimitSwitchClosed()));
 				this.writer.write(String.format(",%b", Robot.elevator.isZeroed));
-				this.writer.write(String.format(",%d", Motor.getClosedLoopError(0)));
-				this.writer.write(String.format(",%d", Motor.getSelectedSensorPosition(0)));
-				this.writer.write(String.format(",%.3f", getCurrent()));
-				this.writer.write(String.format(",%.3f", Motor.getMotorOutputVoltage()));
-
+				this.writer.write(String.format(",%d", Robot.elevator.getError()));
+				this.writer.write(String.format(",%d", Robot.elevator.getPosition()));
+				this.writer.write(String.format(",%.3f", Robot.elevator.getCurrent()));
+				this.writer.write(String.format(",%.3f", Robot.elevator.getMotorOutputVoltage()));
 				this.writer.newLine();
 			} catch (IOException e) {
 				e.printStackTrace();
