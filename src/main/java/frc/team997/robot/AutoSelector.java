@@ -34,7 +34,7 @@ public class AutoSelector {
 	private static AutoSelector instance;
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<Command>();
-	public static String gameData;
+	public static String m_gameData;
 
 	public static AutoSelector getInstance() {
 		if (instance == null) {
@@ -84,9 +84,9 @@ public class AutoSelector {
 		// In order to work with the field information this needs to be called in
 		// AutoInit
 
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		SmartDashboard.putString("gamedata", gameData);
-		System.out.println("auto init game data: " + gameData);
+		m_gameData = DriverStation.getInstance().getGameSpecificMessage();
+		SmartDashboard.putString("gamedata", m_gameData);
+		System.out.println("auto init game data: " + m_gameData);
 
 		m_chosenCommand = m_chooser.getSelected();
 		m_cName = m_chosenCommand.getName();
@@ -95,7 +95,7 @@ public class AutoSelector {
 
 		// AUTO CENTER SWITCH DELIVERY
 		if (m_cName.equals("AutoCenterSwitchDelivery")) {
-			if (gameData.charAt(0) == 'L') {
+			if (m_gameData.charAt(0) == 'L') {
 				m_autonomousCommand = new AutoCenterLeftSwitch();
 				System.out.println("Autocommand center switch left");
 			} else {
@@ -104,10 +104,10 @@ public class AutoSelector {
 			}
 
 		} else if (m_cName.equals("LeftScaleOrSwitch")) {
-			if (gameData.charAt(1) == 'L') {
+			if (m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftScale();
 				System.out.println("Autocommand scale left left");
-			} else if (gameData.charAt(0) == 'L') {
+			} else if (m_gameData.charAt(0) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftSwitch();
 				System.out.println("Autocommand switch left left");
 			} else {
@@ -116,10 +116,10 @@ public class AutoSelector {
 			}
 
 		} else if (m_cName.equals("RightScaleOrSwitch")) {
-			if (gameData.charAt(1) == 'R') {
+			if (m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoRightRightScale();
 				System.out.println("Autocommand scale right right");
-			} else if (gameData.charAt(0) == 'R') {
+			} else if (m_gameData.charAt(0) == 'R') {
 				m_autonomousCommand = new AutoRightRightSwitch();
 				System.out.println("Autocommand switch right right");
 			} else {
@@ -128,7 +128,7 @@ public class AutoSelector {
 			}
 
 		} else if (m_cName.equals("AutoLeftScale")) {
-			if (gameData.charAt(1) == 'L') {
+			if (m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftScale();
 				System.out.println("Autocommand scale left left");
 			} else {
@@ -137,7 +137,7 @@ public class AutoSelector {
 			}
 
 		} else if (m_cName.equals("AutoRightScale")) {
-			if (gameData.charAt(1) == 'R') {
+			if (m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoRightRightScale();
 				System.out.println("Autocommand scale right right");
 			} else {
@@ -150,38 +150,38 @@ public class AutoSelector {
 
 		// AUTO LEFT SCALE/SWITCH DELIVERY
 		else if (m_cName.equals("Auto2CubeLeftStart")) {
-			if (gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
+			if (m_gameData.charAt(0) == 'L' && m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new Auto2CubeLeftLeft();
 				System.out.println("Autocommand 2 cube left left scale and switch");
-			} else if (gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
+			} else if (m_gameData.charAt(0) == 'L' && m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoLeftLeftSwitch();
 				System.out.println("Autocommand 1 cube left left switch (2 CUBE NOT SUPPORTED)");
-			} else if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
+			} else if (m_gameData.charAt(0) == 'R' && m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftScale();
 				System.out.println("Autocommand 1 cube left left scale (2 CUBE NOT SUPPORTED)");
-			} else if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
+			} else if (m_gameData.charAt(0) == 'R' && m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new CrossLine();
 				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED");
 			}
 		}
 		
-		// AUTO RIGHT SCALE/SWITCH DELIVERY -- just a test
+		// AUTO RIGHT SCALE/SWITCH DELIVERY
 		else if (m_cName.equals("Auto2CubeRightStart")) {
-			if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
+			if (m_gameData.charAt(0) == 'R' && m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new Auto2CubeRightRight();
 				System.out.println("Autocommand 2 cube right right scale and switch");
-			} else if (gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
+			} else if (m_gameData.charAt(0) == 'R' && m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new AutoRightRightSwitch();
 				System.out.println("Autocommand 1 cube right right switch (2 CUBE NOT SUPPORTED)");
-			} else if (gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
+			} else if (m_gameData.charAt(0) == 'L' && m_gameData.charAt(1) == 'R') {
 				m_autonomousCommand = new AutoRightRightScale();
 				System.out.println("2 CUBE NOT SUPPORTED");
-			} else if (gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
+			} else if (m_gameData.charAt(0) == 'L' && m_gameData.charAt(1) == 'L') {
 				m_autonomousCommand = new CrossLine();
 				System.out.println("Autocommand crossline (2 CUBE NOT SUPPORTED)");
 			}
 		} else if (m_cName.equals("AutoRightRightSwitch")) {
-			if (gameData.charAt(0) == 'R') {
+			if (m_gameData.charAt(0) == 'R') {
 				m_autonomousCommand = new AutoRightRightSwitch();
 				System.out.println("Autocommand right switch right");
 			} else {
@@ -190,7 +190,7 @@ public class AutoSelector {
 			}
 
 		} else if (m_cName.equals("AutoLeftLeftSwitch")) {
-			if (gameData.charAt(0) == 'L') {
+			if (m_gameData.charAt(0) == 'L') {
 				m_autonomousCommand = new AutoLeftLeftSwitch();
 				System.out.println("Autocommand left switch left");
 			} else {
